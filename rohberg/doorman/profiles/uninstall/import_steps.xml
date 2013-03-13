@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<import-steps>
+  <import-step id="rohberg.doorman.uninstall" version="2"
+               handler="rohberg.doorman.setuphandlers.removeDoorman"
+               title="Uninstall Strengthened Password PAS Plugin">
+  </import-step>
+</import-steps>

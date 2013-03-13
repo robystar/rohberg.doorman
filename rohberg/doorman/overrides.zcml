@@ -1,0 +1,23 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="rohberg.doorman">
+
+    <browser:page
+      name="register"
+      for="plone.app.layout.navigation.interfaces.INavigationRoot"
+      class=".register.RegistrationForm"
+      permission="cmf.AddPortalMember"
+      layer=".interfaces.IDoormanLayer"
+      />
+
+    <browser:page
+      name="new-user"
+      for="plone.app.layout.navigation.interfaces.INavigationRoot"
+      class=".register.AddUserForm"
+      permission="plone.app.controlpanel.UsersAndGroups"
+      layer=".interfaces.IDoormanLayer"
+      />
+      
+</configure>

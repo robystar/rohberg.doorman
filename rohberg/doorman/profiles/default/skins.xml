@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<object name="portal_skins" allow_any="False" cookie_persistence="False">
+
+ <object name="rohbergdoorman_public"
+    meta_type="Filesystem Directory View"
+    directory="rohberg.doorman:skins/rohbergdoorman_public"/>
+
+    <skin-path name="*">
+        <layer name="rohbergdoorman_public" insert-after="custom" />
+        <!-- <layer name="rohbergdoorman_public" insert-after="custom" /> -->
+    </skin-path>
+
+</object>
