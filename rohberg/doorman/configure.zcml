@@ -35,10 +35,6 @@
       directory="profiles/uninstall"
       description="Deinstalls the rohberg.doorman package"
       provides="Products.GenericSetup.interfaces.EXTENSION"
-      />      
-
-
-    <!-- File System Directory Views registration -->
-    <cmf:registerDirectory name="rohbergdoorman_public"/>
+      />
     
 </configure>
