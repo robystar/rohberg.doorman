@@ -11,7 +11,7 @@ class RohbergDoormanLayer(PloneSandboxLayer):
     defaultBases = (PLONE_FIXTURE,)
     
     def setUpZope(self, app, configurationContext):
-        # Load ZCML
+        # Load ZCML        
         import rohberg.doorman
         # xmlconfig.file('configure.zcml',
         #        rohberg.doorman,
@@ -34,4 +34,15 @@ ROHBERG_DOORMAN_INTEGRATION_TESTING = IntegrationTesting(
 ROHBERG_DOORMAN_FUNCTIONAL_TESTING = FunctionalTesting(
         bases=(ROHBERG_DOORMAN_FIXTURE,),
         name="Rohberg:Functional"
+        )
+
+
+# Vanilla
+class VanillaLayer(PloneSandboxLayer):
+    defaultBases = (PLONE_FIXTURE,)
+    
+VANILLA_FIXTURE = VanillaLayer()
+VANILLA_FUNCTIONAL_TESTING = FunctionalTesting(
+        bases=(VANILLA_FIXTURE,),
+        name="Vanilla:Functional"
         )

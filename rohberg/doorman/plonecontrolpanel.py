@@ -15,7 +15,7 @@ from rohberg.doorman import RDMessageFactory as _
 
 default_password_policies = u"" + '/n'.join([str(item) for item in DEFAULT_POLICIES])
 
-regex_password_policy = r'\(u?\'([^\']*?)\',[ ]?u?\'([\w .]+?)\'\)'
+regex_password_policy = r'\(u?\'([^\']*?)\',[ ]?u?\'([\w .\-!,]+?)\'\)'
 
 class IDoormanSettings(security.ISecuritySchema):
     password_policies = schema.Text(
@@ -34,24 +34,26 @@ class IDoormanSettings(security.ISecuritySchema):
 def get_password_policies(self):
     annotations = IAnnotations(self.portal)
     password_policies = annotations.get('rohberg.doorman.password_policies', [])
-    return "\n".join([str(item) for item in password_policies])
+    return u"" + "\n".join([str(item) for item in password_policies])
 
-def set_password_policies(self, value):
+def set_password_policies(self, value=u""):
     password_policies = []
-    value = value.strip(" \n")
     if value:         
+        value = value.strip(" \n")
         # test syntax of lines especially regular expression
         for item in value.split("\n"):
             mt = re.match(regex_password_policy, item)
             if mt:
                 password_policies.append(mt.group(1,2))
-        
-    annotations = IAnnotations(self.portal)
-    annotations['rohberg.doorman.password_policies'] = password_policies   
     
+    # we constrain to 5 password policy rules
+    password_policies = password_policies[:5]
     plugin = self.portal.acl_users.get(PLUGIN_ID, None)
     if plugin:
         plugin.updatePasswordPolicies(password_policies)
+
+    annotations = IAnnotations(self.portal)
+    annotations['rohberg.doorman.password_policies'] = password_policies
 
 
 # password_duration
@@ -60,9 +62,10 @@ def get_password_duration(self):
     return annotations.get('rohberg.doorman.password_duration', 0)
     
 def set_password_duration(self, value):
+    plugin = self.portal.acl_users.get(PLUGIN_ID, None)
+    plugin.setPasswordDuration(value)
     annotations = IAnnotations(self.portal)
-    annotations['rohberg.doorman.password_duration'] = value   
-    # TODO: refresh PAS plugin with password_duration!
+    annotations['rohberg.doorman.password_duration'] = value
     
 
 def extendSecurityControlPanel(portal=None):     

@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '0.1'
+version = '0.2'
 
 setup(name='rohberg.doorman',
       version=version,
@@ -27,6 +27,7 @@ setup(name='rohberg.doorman',
           'setuptools',
           'Plone',
           'Products.PlonePAS',
+          'five.grok'
       ],
       extras_require={
           'test': ['plone.app.testing',]

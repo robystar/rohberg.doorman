@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<object name="portal_memberdata" meta_type="Plone Memberdata Tool" purge="False">
+ <property name="last_password_reset" type="date" remove="True">2000/1/1</property>
+</object>

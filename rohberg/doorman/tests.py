@@ -1,5 +1,7 @@
 import transaction
 import unittest2 as unittest
+# import datetime
+from DateTime import DateTime
 
 from zope.component import getSiteManager
 from AccessControl import getSecurityManager
@@ -12,11 +14,13 @@ from plone.app.testing import TEST_USER_ID, TEST_USER_NAME, TEST_USER_PASSWORD
 from plone.app.testing import login, setRoles
 from plone.testing.z2 import Browser
 
-from Products.PluggableAuthService.interfaces.plugins import IValidationPlugin
+from Products.PluggableAuthService.interfaces.plugins import\
+    IValidationPlugin, IAuthenticationPlugin, IChallengePlugin
 
 from rohberg.doorman.testing import \
-    ROHBERG_DOORMAN_INTEGRATION_TESTING, ROHBERG_DOORMAN_FUNCTIONAL_TESTING
-from rohberg.doorman.plugins.doorman import DEFAULT_POLICIES
+    ROHBERG_DOORMAN_INTEGRATION_TESTING, ROHBERG_DOORMAN_FUNCTIONAL_TESTING,\
+    VANILLA_FUNCTIONAL_TESTING
+from plugins.doorman import PLUGIN_ID, DEFAULT_POLICIES
 
 username = "user1"
 weakpassword        = '12345'
@@ -54,16 +58,6 @@ class DoormanTestCase(unittest.TestCase):
         # Then we log in with strong password, and we will be authenticated.
         acl_users.userSetPassword(username, strongpassword)
         self.assertEqual(validate(validators, user, strongpassword), [])
-    
-    # def test_passwordduration(self):
-    #     # We login after 7 months and are not able to login
-    #     # TODO: password_duration: login after 7 months
-    # 
-    # 
-    #     # Then we reset password and can login and are authorized to browse the portal.
-    #     # TODO: password_duration: reset password
-    #     
-    #     self.assertTrue(True)
 
 
 def browserLogin(portal, browser, username=None, password=None):
@@ -160,22 +154,7 @@ class ControlPanelTestCase(unittest.TestCase):
 ('.*[0-9].*', 'Minimum 1 number.')"""
         browser.getControl(name='form.actions.save').click()
         
-        transaction.commit()  
-              
-        # TODO: mixing functional and integration tests 
-        # 
-        # validators = self.acl_users.plugins.listPlugins(IValidationPlugin)     
-        # self.acl_users.userFolderAddUser(username, strongpassword, ['Member'], [])
-        # user = self.acl_users.getUserById(username)
-        # 
-        # # We log in with strong password, and we will not be authenticated.
-        # self.assertNotEqual(validate(validators, user, strongpassword), [])
-        # 
-        # # Then we log in with stronger password, and we will be authenticated.
-        # acl_users.userSetPassword(username, strongerpassword)
-        # self.assertEqual(validate(validators, user, strongerpassword), [])
-        # 
-        # 
+        #  now we change our password
         browser.open(self.portalURL + "/@@change-password")
         
         # First we try a weak password
@@ -183,7 +162,7 @@ class ControlPanelTestCase(unittest.TestCase):
         browser.getControl(name='form.new_password').value = strongpassword
         browser.getControl(name='form.new_password_ctl').value = strongpassword
         browser.getControl(name='form.actions.reset_passwd').click()
-        self.assertTrue('Password changed' not in browser.contents)   
+        self.assertFalse('Password changed' in browser.contents)   
         self.assertTrue('Minimum 10 characters.' in browser.contents)  
         
         # Then we change the password to a strong password
@@ -191,8 +170,7 @@ class ControlPanelTestCase(unittest.TestCase):
         browser.getControl(name='form.new_password').value = strongerpassword
         browser.getControl(name='form.new_password_ctl').value = strongerpassword
         browser.getControl(name='form.actions.reset_passwd').click()
-        self.assertTrue('Password changed' in browser.contents)
-        
+        self.assertTrue('Password changed' in browser.contents)        
         
         
             
@@ -221,4 +199,95 @@ class ControlPanelTestCase(unittest.TestCase):
         # The new user is registered 
         self.assertTrue("User added" in self.browser.contents)
         
+         
+class DurationTestCase(unittest.TestCase):
+    
+    layer = ROHBERG_DOORMAN_INTEGRATION_TESTING
+    
+    def setUp(self):
+        super(DurationTestCase, self).setUp()
+        self.portal = self.layer['portal']
+        self.app = self.layer['app']
+        self.acl_users = getToolByName(self.portal, 'acl_users')   
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        # login(self.portal, TEST_USER_NAME)
+        self.membership = getToolByName(self.portal, 'portal_membership')
+        
+    def testProperties(self):
+        self.portal.portal_registration.addMember(username, strongpassword)
+        member = self.membership.getMemberById(username)
+        nie = DateTime('2000/01/01 00:00:00') #datetime.date(2000,1,1)
+                
+        self.assertEqual(member.getProperty('last_password_reset'), nie)
+        self.acl_users.userSetPassword(username, strongerpassword)
+        member = self.membership.getMemberById(username)
+        self.assertNotEqual(member.getProperty('last_password_reset'), nie)
+        
+        
+class DurationTestCase2(unittest.TestCase):
+    
+    layer = ROHBERG_DOORMAN_FUNCTIONAL_TESTING
+    
+    def setUp(self):
+        super(DurationTestCase2, self).setUp()
+        self.portal = self.layer['portal']
+        self.portalURL = self.portal.absolute_url()
+        self.app = self.layer['app']
+        self.acl_users = getToolByName(self.portal, 'acl_users')   
+        self.browser = Browser(self.app) 
+        self.browser.handleErrors = False
+        self.membership = self.portal.portal_membership
+             
+        
+    def test_password_duration(self):         
+        # add user (username, strongpassword)
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        self.acl_users.userFolderAddUser(username, strongpassword, ['Member'], [])
+        setRoles(self.portal, TEST_USER_ID, ['Member'])
+                
+        # set password_duration to 1 day
+        plugin = self.portal.acl_users.get(PLUGIN_ID, None)        
+        plugin.setPasswordDuration(1)
+        
+        # before we go to browser:
+        transaction.commit() 
+        browser = Browser(self.app)
+        
+        # we are not able to log in
+        browserLogin(self.portal, browser, username, strongpassword)
+        self.assertFalse("logged in" in browser.contents)
+        
+        # reset password
+        # start password reset procedure and get passwordreset url
+        reset_tool = getToolByName(self.portal, 'portal_password_reset')
+        reset = reset_tool.requestReset(username)
+        passwordreset_url = "%s/passwordreset/%s?userid=%s" % (self.portal.absolute_url(), reset.get('randomstring',""), username)
+        # before we go back to browser:
+        transaction.commit() 
+        browser = Browser(self.app)
+        browser.open(passwordreset_url)
+        self.assertEqual(browser.url, passwordreset_url)        
+        
+        browser.getControl(name='password').value = strongerpassword
+        browser.getControl(name='password2').value = strongerpassword
+        browser.getControl('Set my password').click()
+        self.assertTrue('Your password has been set successfully.' in browser.contents)
+        
+        # now we log in
+        browserLogin(self.portal, browser, username, strongerpassword)
+        self.assertTrue("logged in" in browser.contents)
+        
+    def test_password_duration_default(self):
+        # add user (username, strongpassword)
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        self.acl_users.userFolderAddUser(username, strongpassword, ['Member'], [])
+        setRoles(self.portal, TEST_USER_ID, ['Member'])
+        
+        transaction.commit() 
+        browser = Browser(self.app)
+        
+        # we are able to log in, if no password_duration ist defined
+        browserLogin(self.portal, browser, username, strongpassword)
+        self.assertTrue("logged in" in browser.contents)
+
         

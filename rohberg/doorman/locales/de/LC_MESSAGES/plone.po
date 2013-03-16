@@ -39,3 +39,6 @@ msgstr "Wählen Sie ein Passwort."
 #: plone.app.users/plone/app/users/browser/register.py:57
 msgid "help_password_creation"
 msgstr " "
+
+msgid "Your password is expired. Please reset your password."
+msgstr "Ihr Passwort ist abgelaufen. Bitte wählen Sie ein neues Passwort."

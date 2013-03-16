@@ -3,11 +3,11 @@ from Products.CMFCore.utils import _checkPermission
 from Products.CMFDefault.permissions import ManagePortal
 from Products.CMFDefault.utils import checkEmailAddress
 from Products.PluggableAuthService.interfaces.plugins import \
-    IValidationPlugin, IPropertiesPlugin
+    IValidationPlugin, IAuthenticationPlugin
 
 from rohberg.doorman import RDMessageFactory as _
 
-# TODO: patch: Not nice. Can we do better? 
+# TODO: patch: Not nice. Can we realize this more elegant? 
 
 def testPasswordValidity(self, password, confirm=None):
 
@@ -61,6 +61,8 @@ alphabets = [string.lowercase, string.uppercase, string.digits, string.punctuati
 alphabet = "+".join(alphabets)
 
 def getPassword(length=8, s=None):
+    """generates password
+    """
     length = length>=20 and langth or 20
     password = []
     for group in alphabets:

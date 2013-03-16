@@ -6,7 +6,8 @@ rohberg.doorman
 What is rohberg.doorman ?
 =========================
 
-This package provides you with a configuration of a custom password policy.
+This package provides your Plone site with a configuration of a custom password policy.
+It also lets you configure your Plone site to force password reset after defined time.
 
 Works with
 ==========
@@ -46,10 +47,15 @@ Then open the "Security" control panel of your Plone site. A new field lets you
 define your custom password policy via regular expressions.
 
 
-Default Password Policy
+Password Policy
 =============================
 
-As long no custom policy is configured, default policy as defined in this package is effective. You can review and edit the effective password policy on security control panel.
+As long as no custom policy is configured, default policy as defined in this package is effective. You can review and edit the effective password policy on security control panel.
+
+Password Duration
+============================
+
+If an expiration of password is defined in security control panel and user has not reset his password during defined expiration time reset password form is presented to user after login attempt which is rejected.
 
 Links
 =====
@@ -58,10 +64,10 @@ Cheeseshop
   http://pypi.python.org/pypi/rohberg.doorman
 
 Git repository
-  https://github.com/rohberg/rohberg.doorman
+  https://github.com/ksuess/rohberg.doorman
 
 Issue tracker
-  https://github.com/rohberg/rohberg.doorman/issues
+  https://github.com/ksuess/rohberg.doorman/issues
 
 Contributors
 ============
@@ -72,7 +78,9 @@ Credits
 ============
 
 Thanks to Dylan Jay, Daniel Nouri and BlueDynamics for PAS plugin stuff of PasswordStrength.
+
 Thanks to Nathan Van Gheem for annotation stuff of PloneTrueGallery.
+
 Thanks to Bertrand Mathieu, Thomas Desvenain, Gilles Lenfant, Elisabeth Leddy for 
 control panel stuff of iw.rejectanonymous
 
