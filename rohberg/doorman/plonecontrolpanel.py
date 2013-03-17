@@ -20,7 +20,7 @@ regex_password_policy = r'\(u?\'([^\']*?)\',[ ]?u?\'([\w .\-!,]+?)\'\)'
 class IDoormanSettings(security.ISecuritySchema):
     password_policies = schema.Text(
                 title=_(u"Regular Expressions that a password must regard."),
-                description=_(u"One expression per line: (u'.{8}.*', u'Minimum 8 characters.')   Default value is %s" % str(DEFAULT_POLICIES)),
+                description=_(u"One expression per line: (u'.{8}.*', u'Minimum 8 characters.'). Default value is ") + str(DEFAULT_POLICIES),
                 required=False,
                 default=default_password_policies)
     password_duration = schema.Int(
@@ -28,6 +28,9 @@ class IDoormanSettings(security.ISecuritySchema):
                 description=_(u"Days"),
                 required=False,
                 default=0)
+    reject_non_members = schema.Bool(
+                title=_(u"Registrierte User, die nicht die Role 'Member' haben, ausschliessen."),
+                default=True)
 
 
 # password_policies
@@ -67,6 +70,15 @@ def set_password_duration(self, value):
     annotations = IAnnotations(self.portal)
     annotations['rohberg.doorman.password_duration'] = value
     
+# reject_non_members
+def get_reject_non_members(self):
+    annotations = IAnnotations(self.portal)
+    return annotations.get('rohberg.doorman.reject_non_members', True)
+
+def set_reject_non_members(self, value):
+    annotations = IAnnotations(self.portal)
+    annotations['rohberg.doorman.reject_non_members'] = value
+    
 
 def extendSecurityControlPanel(portal=None):     
     out = StringIO()   
@@ -82,6 +94,12 @@ def extendSecurityControlPanel(portal=None):
     security.SecurityControlPanelAdapter.password_duration = property(
         security.SecurityControlPanelAdapter.get_password_duration,
         security.SecurityControlPanelAdapter.set_password_duration
+        )
+    security.SecurityControlPanelAdapter.get_reject_non_members = get_reject_non_members
+    security.SecurityControlPanelAdapter.set_reject_non_members = set_reject_non_members
+    security.SecurityControlPanelAdapter.reject_non_members = property(
+        security.SecurityControlPanelAdapter.get_reject_non_members,
+        security.SecurityControlPanelAdapter.set_reject_non_members
         )
 
     # re-register adapter with new interface

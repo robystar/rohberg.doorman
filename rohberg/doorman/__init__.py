@@ -17,6 +17,7 @@ def initialize(context):
                           visibility = None)
 
 from rohberg.doorman.plonecontrolpanel import extendSecurityControlPanel
+# TODO: Just if rohberg.doorman installed
 extendSecurityControlPanel()
 
 

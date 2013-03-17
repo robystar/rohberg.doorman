@@ -21,7 +21,8 @@ import logging
 log = logging.getLogger('doorman PAS Plugin')
 
 PLUGIN_ID = 'strengthenedpasswordpasplugin'
-PLUGIN_INTERFACES = [IValidationPlugin, IUserManagement, IAuthenticationPlugin, IChallengePlugin]
+PLUGIN_INTERFACES = [IValidationPlugin, IUserManagement] 
+# IAuthenticationPlugin, IChallengePlugin
 
 DEFAULT_POLICIES = [(u'.{8}.*','Minimum 8 characters.')
                     ,(u'.*[A-Z].*','Minimum 1 capital letter.')
@@ -195,6 +196,8 @@ class StrengthenedPasswordPlugin(BasePlugin):
         """ Do not change a user's password but 
         (notify if this is done or )
         modify user property last_password_reset
+        
+        IUserManagement(plugins.IUserAdderPlugin)
         """
         mt = getToolByName(self, 'portal_membership')
         member = mt.getMemberById(principal_id)

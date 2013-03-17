@@ -15,7 +15,7 @@ from plone.app.testing import login, setRoles
 from plone.testing.z2 import Browser
 
 from Products.PluggableAuthService.interfaces.plugins import\
-    IValidationPlugin, IAuthenticationPlugin, IChallengePlugin
+    IValidationPlugin, IAuthenticationPlugin
 
 from rohberg.doorman.testing import \
     ROHBERG_DOORMAN_INTEGRATION_TESTING, ROHBERG_DOORMAN_FUNCTIONAL_TESTING,\
@@ -233,11 +233,10 @@ class DurationTestCase2(unittest.TestCase):
         self.portal = self.layer['portal']
         self.portalURL = self.portal.absolute_url()
         self.app = self.layer['app']
-        self.acl_users = getToolByName(self.portal, 'acl_users')   
+        self.acl_users = getToolByName(self.portal, 'acl_users')
         self.browser = Browser(self.app) 
         self.browser.handleErrors = False
         self.membership = self.portal.portal_membership
-             
         
     def test_password_duration(self):         
         # add user (username, strongpassword)

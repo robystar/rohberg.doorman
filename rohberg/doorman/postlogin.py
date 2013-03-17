@@ -1,5 +1,8 @@
+from zope.annotation.interfaces import IAnnotations
 from AccessControl.SecurityManagement import noSecurityManager
 from Products.statusmessages.interfaces import IStatusMessage
+
+# from AccessControl import Unauthorized
 
 # TODO: Ajax. redirect von Login boexli funktioniert noch nicht
 
@@ -37,6 +40,37 @@ logger = logging.getLogger(__name__)
 
 from rohberg.doorman import RDMessageFactory as _
 
+
+# def reject_non_members(user):
+#     """reject user whithout "member"" Role
+#     """
+#     
+#     portal = getSite()
+#     request = getattr(portal, "REQUEST", None)
+#     if not request:
+#         return False
+#     username = user.getId()
+#     
+#     if not user.has_role('Member'):
+#         # logout:
+#         noSecurityManager()
+#         logger.info("Redirecting non-member %s to info page" % username)
+#         
+#         msg = _(u"Your account is locked.")
+#         IStatusMessage(request).addStatusMessage(msg, type='error')
+#         
+#         request.response.redirect(portal.absolute_url() + "/login")
+#         return True
+# 
+#     # Let the normal login proceed to the page "You are now logged in" etc.
+#     return False
+#          
+# @grok.subscribe(IUserLoggedInEvent)
+# def logged_in_handler_nonmember(event):
+#     user = event.object
+#     reject_non_members(user)
+    
+    
 def redirect_to_loggedout_reset_password(user):
     """
     Redirects the user to reset password form
@@ -44,7 +78,9 @@ def redirect_to_loggedout_reset_password(user):
     :return: True or False depending if we found a redirect target or not
     """
     portal = getSite()
-
+    request = getattr(portal, "REQUEST", None)
+    if not request:
+        return False
     username = user.getId()
     
     def isPasswordDurationExpired(portal, member):
@@ -68,12 +104,23 @@ def redirect_to_loggedout_reset_password(user):
         reset = reset_tool.requestReset(username)
         url = "%s/passwordreset/%s?userid=%s" % (portal.absolute_url(), reset.get('randomstring',""), username)
         return url
-    
-    request = getattr(portal, "REQUEST", None)
-    if not request:
-        return False
 
-    sm = getSecurityManager()
+
+
+    # reject non-members and redirect to info page
+    annotations = IAnnotations(portal)
+    reject_non_members = annotations.get('rohberg.doorman.reject_non_members', True)
+    if reject_non_members:
+        if not user.has_role('Member') and not user.has_role('Manager'):
+            # logout:
+            noSecurityManager()
+            logger.info("Redirecting non-member %s to info page" % username)
+
+            msg = _(u"Your account is locked.")
+            IStatusMessage(request).addStatusMessage(msg, type='error')
+
+            request.response.redirect(portal.absolute_url()) #  + "/login"
+            return True
 
     
     if isPasswordDurationExpired(portal, user):
@@ -85,6 +132,7 @@ def redirect_to_loggedout_reset_password(user):
         IStatusMessage(request).addStatusMessage(msg, type='error')
         
         request.response.redirect(getPasswordResetURL(portal, username))
+        # raise Unauthorized
         return True
 
     # Let the normal login proceed to the page "You are now logged in" etc.
@@ -100,3 +148,10 @@ def logged_in_handler(event):
     user = event.object
 
     redirect_to_loggedout_reset_password(user)
+
+
+    
+    
+    
+    
+    
