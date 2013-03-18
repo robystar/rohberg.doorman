@@ -7,7 +7,9 @@ What is rohberg.doorman ?
 =========================
 
 This package provides Plone sites with a configuration of a custom password policy.
+
 It also lets you configure a Plone site to force password reset after defined time.
+
 Non-Members can be disclosed from entering Site.
 
 Works with
@@ -23,24 +25,27 @@ recipe to manage your project, you can do this:
 
 * Add ``rohberg.doorman`` to the list of eggs to install, e.g.:
 
-    [buildout]
+```[buildout]
+...
+eggs =
     ...
-    eggs =
-        ...
-        rohberg.doorman
-       
+    rohberg.doorman
+```
+    
 * Tell the plone.recipe.zope2instance recipe to install a ZCML slug:
 
-    [instance]
-    recipe = plone.recipe.zope2instance
-    ...
-    zcml =
-        rohberg.doorman
-      
+'''[instance]
+recipe = plone.recipe.zope2instance
+...
+zcml =
+    rohberg.doorman
+'''
+     
 * Re-run buildout, e.g. with:
 
-    $ ./bin/buildout
-        
+'''$ ./bin/buildout
+'''
+     
 You can skip the ZCML slug if you are going to explicitly include the package
 from another package's configure.zcml file.
 
