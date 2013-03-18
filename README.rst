@@ -6,8 +6,9 @@ rohberg.doorman
 What is rohberg.doorman ?
 =========================
 
-This package provides your Plone site with a configuration of a custom password policy.
-It also lets you configure your Plone site to force password reset after defined time.
+This package provides Plone sites with a configuration of a custom password policy.
+It also lets you configure a Plone site to force password reset after defined time.
+Non-Members can be disclosed from entering Site.
 
 Works with
 ==========

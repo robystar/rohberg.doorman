@@ -1,9 +1,13 @@
+from zope.annotation.interfaces import IAnnotations
+from AccessControl import Unauthorized
 from Products.CMFPlone.RegistrationTool import RegistrationTool
-from Products.CMFCore.utils import _checkPermission
+from Products.CMFCore.utils import _checkPermission, getToolByName
 from Products.CMFDefault.permissions import ManagePortal
 from Products.CMFDefault.utils import checkEmailAddress
 from Products.PluggableAuthService.interfaces.plugins import \
     IValidationPlugin, IAuthenticationPlugin
+
+from zope.app.component.hooks import getSite
 
 from rohberg.doorman import RDMessageFactory as _
 
@@ -74,3 +78,21 @@ def getPassword(length=8, s=None):
 def patchGetPassword():
     RegistrationTool.original_getPassword = RegistrationTool.getPassword
     RegistrationTool.getPassword = getPassword
+
+
+def beforeMailPassword(self, login, REQUEST):
+    """ Wrapper around mailPassword """
+    portal = getSite()
+    reject_non_members = IAnnotations(portal).get('rohberg.doorman.reject_non_members', True)
+    if reject_non_members:
+        membership = getToolByName(self, 'portal_membership')
+        member = membership.getMemberById(login)
+        if member:
+            if not (member.has_role("Member") or member.has_role("Manager")):
+                raise ValueError(_(u"Your account is locked"))
+    return self.original_mailPassword(login,REQUEST)
+    
+def patchMailPassword():
+    RegistrationTool.original_mailPassword = RegistrationTool.mailPassword
+    RegistrationTool.mailPassword = beforeMailPassword
+        

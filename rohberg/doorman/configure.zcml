@@ -36,5 +36,5 @@
       description="Deinstalls the rohberg.doorman package"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
-    
+
 </configure>

@@ -216,7 +216,7 @@ class DurationTestCase(unittest.TestCase):
     def testProperties(self):
         self.portal.portal_registration.addMember(username, strongpassword)
         member = self.membership.getMemberById(username)
-        nie = DateTime('2000/01/01 00:00:00') #datetime.date(2000,1,1)
+        nie = DateTime('2000/01/01 00:00:00')
                 
         self.assertEqual(member.getProperty('last_password_reset'), nie)
         self.acl_users.userSetPassword(username, strongerpassword)
@@ -289,4 +289,32 @@ class DurationTestCase2(unittest.TestCase):
         browserLogin(self.portal, browser, username, strongpassword)
         self.assertTrue("logged in" in browser.contents)
 
+    def test_reject_non_member(self):
+        # add user (username, strongpassword)
+        setRoles(self.portal, TEST_USER_ID, ['Manager']    )
+        self.acl_users.userFolderAddUser(username, strongpassword, [], [])
+        # setRoles(self.portal, TEST_USER_ID, ['Member'])        
+        
+        transaction.commit() 
+        browser = Browser(self.app)
+        
+        # we are not able to log in without Role "Member"
+        browserLogin(self.portal, browser, username, strongpassword)
+        self.assertFalse("logged in" in browser.contents)
+        
+        browserLogin(self.portal, browser, TEST_USER_NAME, TEST_USER_PASSWORD)        
+        login(self.portal, TEST_USER_NAME)
+        browser.open(self.portalURL+"/@@security-controlpanel")
+        # print browser.contents
+        browser.getControl(name='form.reject_non_members').value = False
+        browser.getControl(name='form.actions.save').click()
+        
+        browser.open(self.portalURL + "/logout") 
+        
+        transaction.commit() 
+        browser = Browser(self.app)       
+        
+        # now we are able to log in without Role "Member"
+        browserLogin(self.portal, browser, username, strongpassword)
+        self.assertTrue("logged in" in browser.contents)
         

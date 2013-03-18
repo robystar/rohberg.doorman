@@ -22,6 +22,7 @@ extendSecurityControlPanel()
 
 
 from patch import \
-    patchTestPasswordValidity, patchGetPassword
+    patchTestPasswordValidity, patchGetPassword, patchMailPassword
 patchTestPasswordValidity()
 patchGetPassword()
+patchMailPassword()

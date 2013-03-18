@@ -102,7 +102,7 @@ def redirect_to_loggedout_reset_password(user):
     def getPasswordResetURL(portal, username):
         reset_tool = getToolByName(portal, 'portal_password_reset')
         reset = reset_tool.requestReset(username)
-        url = "%s/passwordreset/%s?userid=%s" % (portal.absolute_url(), reset.get('randomstring',""), username)
+        url = u"%s/passwordreset/%s?userid=%s" % (portal.absolute_url(), reset.get('randomstring',""), username)
         return url
 
 
@@ -117,22 +117,22 @@ def redirect_to_loggedout_reset_password(user):
             logger.info("Redirecting non-member %s to info page" % username)
 
             msg = _(u"Your account is locked.")
-            IStatusMessage(request).addStatusMessage(msg, type='error')
+            portal.plone_utils.addPortalMessage(msg, type='info')
 
-            request.response.redirect(portal.absolute_url()) #  + "/login"
-            return True
+            url = portal.absolute_url() + "/login"
+            return request.response.redirect(url)
 
     
     if isPasswordDurationExpired(portal, user):
         # logout:
         noSecurityManager()
-        logger.info("Redirecting user %s to reset password form %s" % (username, getPasswordResetURL(portal, username)))
+        url = getPasswordResetURL(portal, username)
+        logger.info("Redirecting user %s to reset password form %s" % (username, url))
         
         msg = _(u"Your password is expired. Please reset your password.")
-        IStatusMessage(request).addStatusMessage(msg, type='error')
+        portal.plone_utils.addPortalMessage(msg, type='info')
         
-        request.response.redirect(getPasswordResetURL(portal, username))
-        # raise Unauthorized
+        request.response.redirect(url)
         return True
 
     # Let the normal login proceed to the page "You are now logged in" etc.
