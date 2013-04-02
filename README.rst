@@ -20,7 +20,7 @@ Works with
 Configuration
 ==============
 
-Then open the security control panel of your Plone site. New fields let you 
+Open the security control panel of your Plone site. New fields let you 
 define your custom password policy via regular expressions and define password expiration.
 
 
@@ -67,3 +67,8 @@ License
 Distributed under the GPL.
 
 See LICENSE.txt and LICENSE.GPL for details.
+
+Tests
+======
+
+done!

@@ -162,7 +162,9 @@ class StrengthenedPasswordPlugin(BasePlugin):
     security.declarePrivate('validateUserInfo')
     def validateUserInfo(self, user, set_id, set_info ):
 
-        """ -> ( error_info_1, ... error_info_N )
+        """ called when user resets password
+        
+        -> ( error_info_1, ... error_info_N )
 
         o Returned values are dictionaries, containing at least keys:
 
@@ -188,6 +190,7 @@ class StrengthenedPasswordPlugin(BasePlugin):
                 i += 1
 
             errors = [{'id':'password','error':e} for e in errors] 
+        
         return errors
 
 

@@ -65,7 +65,7 @@ alphabets = [string.lowercase, string.uppercase, string.digits, string.punctuati
 alphabet = "+".join(alphabets)
 
 def getPassword(length=8, s=None):
-    """generates password
+    """generates strongerpassword
     """
     length = length>=20 and langth or 20
     password = []
@@ -81,7 +81,7 @@ def patchGetPassword():
 
 
 def beforeMailPassword(self, login, REQUEST):
-    """ Wrapper around mailPassword """
+    """ Password reset only with Role 'Member' """
     portal = getSite()
     reject_non_members = IAnnotations(portal).get('rohberg.doorman.reject_non_members', True)
     if reject_non_members:

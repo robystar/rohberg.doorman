@@ -4,7 +4,7 @@ from Products.statusmessages.interfaces import IStatusMessage
 
 # from AccessControl import Unauthorized
 
-# TODO: Ajax. redirect von Login boexli funktioniert noch nicht
+# TODO: Ajax. Redirect von Login box fails
 
 # logout and redirect to reset password form
 # 
