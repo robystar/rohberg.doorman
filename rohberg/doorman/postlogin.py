@@ -88,6 +88,8 @@ def redirect_to_loggedout_reset_password(user):
         if username == "admin": return False  
         
         plugin = portal.acl_users.get(PLUGIN_ID, None)
+        if not plugin:
+            return False
         password_duration = plugin.getPasswordDuration()
         # if no password_duration defined or password_duration == 0: no password reset neccessary
         if password_duration < 1:
@@ -130,7 +132,7 @@ def redirect_to_loggedout_reset_password(user):
         logger.info("Redirecting user %s to reset password form %s" % (username, url))
         
         msg = _(u"Your password is expired. Please reset your password.")
-        portal.plone_utils.addPortalMessage(msg, type='info')
+        portal.plone_utils.addPortalMessage(msg, type='error')
         
         request.response.redirect(url)
         return True

@@ -29,8 +29,6 @@ def testPasswordValidity(self, password, confirm=None):
     if confirm is not None and confirm != password:
         return _(u'Your password and confirmation did not match. '
                  u'Please try again.')
-
-    # return None
     
     # changes:
     # Use PAS to test validity
@@ -89,7 +87,7 @@ def beforeMailPassword(self, login, REQUEST):
         member = membership.getMemberById(login)
         if member:
             if not (member.has_role("Member") or member.has_role("Manager")):
-                raise ValueError(_(u"Your account is locked"))
+                raise ValueError(_(u"Your account is locked."))
     return self.original_mailPassword(login,REQUEST)
     
 def patchMailPassword():

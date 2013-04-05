@@ -1,11 +1,11 @@
 # -*- extra stuff goes here -*-
 
 from Products.PluggableAuthService.PluggableAuthService import registerMultiPlugin
-from plugins import doorman
 
 from zope.i18nmessageid import MessageFactory
 RDMessageFactory = MessageFactory("rohberg.doorman")
 
+from plugins import doorman
 
 def initialize(context):
     ''' Initialize product

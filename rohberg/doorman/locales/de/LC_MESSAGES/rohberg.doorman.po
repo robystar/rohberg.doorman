@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-03-17 11:11+0000\n"
+"POT-Creation-Date: 2013-04-04 11:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,6 +21,10 @@ msgstr "Tage"
 #: ./plonecontrolpanel.py:27
 msgid "Duration of password validity."
 msgstr "Dauer der Gültigkeit eines Passwords"
+
+#: ./plugins/doorman.py:192
+msgid "New password has to differ from old one."
+msgstr "Das neue Passwort bitte verschieden vom vorigen wählen."
 
 #: ./plonecontrolpanel.py:23
 msgid "One expression per line: (u'.{8}.*', u'Minimum 8 characters.'). Default value is "
@@ -46,7 +50,7 @@ msgstr "Der Login-Name ist schon vergeben oder ungültig. Bitte wählen Sie eine
 msgid "This username is reserved. Please choose a different name."
 msgstr "Dieser Name ist reserviert. Bitte wählen Sie einen anderen Namen"
 
-#: ./patch.py:20
+#: ./patch.py:24
 msgid "You must enter a password."
 msgstr "Bitte geben Sie ein Passwort ein."
 
@@ -54,19 +58,20 @@ msgstr "Bitte geben Sie ein Passwort ein."
 msgid "You must enter a valid email address."
 msgstr "Bitte geben Sie eine gültige Email-Adresse ein."
 
-#: ./postlogin.py:117
+#: ./patch.py:92
+#: ./postlogin.py:122
 msgid "Your account is locked."
 msgstr "Ihr Account ist gesperrt. Falls Sie der Meinung sind, dass dies zu Unrecht ist, dann kontaktieren Sie bitte den Verantwortlichen der Website."
 
-#: ./patch.py:26
+#: ./patch.py:30
 msgid "Your password and confirmation did not match. Please try again."
 msgstr "Ihr Password und seine Bestätigung stimmen nicht überein."
 
-#: ./postlogin.py:129
+#: ./postlogin.py:135
 msgid "Your password is expired. Please reset your password."
 msgstr "Ihr Passwort ist abgelaufen. Bitte wählen Sie ein neues."
 
-#: ./patch.py:48
+#: ./patch.py:52
 msgid "Your password must contain at least 5 characters."
 msgstr "Ihr Passwort muss mindestens 5 Zeichen enthalten."
 

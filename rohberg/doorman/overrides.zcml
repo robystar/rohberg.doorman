@@ -4,6 +4,8 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="rohberg.doorman">
 
+    <include package="plone.app.controlpanel" />
+    
     <browser:page
       name="register"
       for="plone.app.layout.navigation.interfaces.INavigationRoot"

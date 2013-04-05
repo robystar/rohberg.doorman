@@ -6,9 +6,12 @@ from DateTime import DateTime
 from zope.app.component.hooks import getSite
 from Acquisition import aq_base, aq_parent, aq_inner
 from Products.CMFCore.utils import getToolByName
+
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
+# from Products.PluggableAuthService.plugins.ZODBUserManager import \
+#     ZODBUserManager as BasePlugin
 from Products.PlonePAS.Extensions.Install import activatePluginInterfaces
-from AccessControl.SecurityInfo import ClassSecurityInfo
+from AccessControl import ClassSecurityInfo, AuthEncoding
 from Products.PluggableAuthService.utils import classImplements
 from Globals import InitializeClass
 from Products.PluggableAuthService.interfaces.plugins import \
@@ -16,6 +19,8 @@ from Products.PluggableAuthService.interfaces.plugins import \
 from Products.PlonePAS.interfaces.plugins import \
     IUserManagement
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+
+from rohberg.doorman import RDMessageFactory as _
 
 import logging
 log = logging.getLogger('doorman PAS Plugin')
@@ -115,9 +120,9 @@ class StrengthenedPasswordPlugin(BasePlugin):
 
 
     def __init__(self, id, title=None):
+        # super(StrengthenedPasswordPlugin, self).__init__(id, title)
         self._id = self.id = id
         self.title = title
-        # self.mt = getToolByName(self, 'portal_membership')
 
         i = 1
         for reg,err in DEFAULT_POLICIES:
@@ -145,19 +150,19 @@ class StrengthenedPasswordPlugin(BasePlugin):
     def getPasswordDuration(self):
         return getattr(self, "password_duration", 0)
         
-    def isPasswordDurationExpired(self, username):
-        password_duration = getattr(self, "password_duration", 0)
-        # if no password_duration defined or password_duration == 0: no password reset neccessary
-        if password_duration < 1:
-            return False
-        mt = getToolByName(self, 'portal_membership')
-        member = mt.getMemberById(username)
-        last_password_reset = member.getProperty('last_password_reset')
-        jetzt = DateTime()
-        cond = last_password_reset+password_duration < jetzt
-        if cond:
-            return True
-        return False
+    # def isPasswordDurationExpired(self, username):
+    #     password_duration = getattr(self, "password_duration", 0)
+    #     # if no password_duration defined or password_duration == 0: no password reset neccessary
+    #     if password_duration < 1:
+    #         return False
+    #     mt = getToolByName(self, 'portal_membership')
+    #     member = mt.getMemberById(username)
+    #     last_password_reset = member.getProperty('last_password_reset')
+    #     jetzt = DateTime()
+    #     cond = last_password_reset+password_duration < jetzt
+    #     if cond:
+    #         return True
+    #     return False
     
     security.declarePrivate('validateUserInfo')
     def validateUserInfo(self, user, set_id, set_info ):
@@ -178,6 +183,15 @@ class StrengthenedPasswordPlugin(BasePlugin):
 
         if set_info and set_info.get('password', None) is not None: 
             password = set_info['password']
+            
+            # # TODO: how to compare old and new password? 
+            # # principal_id = ?
+            # acl_users = aq_parent(self)
+            # ups = acl_users.source_users._user_passwords
+            # reference = ups.get(principal_id)
+            # if reference: 
+            #     if AuthEncoding.pw_validate(reference, password):
+            #         errors += [_(u"New password has to differ from old one.")]
 
             i = 1
             while True:
@@ -207,10 +221,10 @@ class StrengthenedPasswordPlugin(BasePlugin):
         user = member
         # acl_users = aq_parent(self)
         # user = acl_users.getUserById(principal_id)
-        
+                
         if user is None:
             raise RuntimeError("User does not exist: %s" % principal_id)
-            
+        
         jetzt = DateTime() # datetime.date.today()  
         user.setMemberProperties({'last_password_reset': jetzt})
     

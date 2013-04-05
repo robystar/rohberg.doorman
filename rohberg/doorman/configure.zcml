@@ -8,6 +8,7 @@
     i18n_domain="rohberg.doorman">
 
     <include package="five.grok" />
+    <include package="Products.CMFCore" file="permissions.zcml" />
 
     <five:registerPackage package="." initialize=".initialize" />
 
