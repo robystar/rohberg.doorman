@@ -27,16 +27,11 @@ msgstr "Wählen Sie ein Passwort."
 #. Default: "Minimum 5 characters."
 #: plone.app.users/plone/app/users/browser/register.py:57
 msgid "help_password_creation"
-msgstr "Mindestens acht Zeichen"
+msgstr "Wählen Sie ein Passwort mit mindestens acht Zeichen, Gross- und Kleinbuchstaben, mindestens einer Zahl und einem Sonderzeichen."
 
 #. Default: "Enter your new password. Minimum 5 characters."
 #: CMFPlone/skins/plone_login/login_password.cpt:69
 #: CMFPlone/skins/plone_prefs/password_form.pt:50
 #: plone.app.users/plone/app/users/browser/personalpreferences.py:388
 msgid "help_new_password"
-msgstr "Wählen Sie ein Passwort mit mindestens acht Zeichen."
-
-#. Default: "Minimum 5 characters."
-#: plone.app.users/plone/app/users/browser/register.py:57
-msgid "help_password_creation"
-msgstr "Wählen Sie ein Passwort mit mindestens acht Zeichen."
+msgstr "Wählen Sie ein Passwort mit mindestens acht Zeichen, Gross- und Kleinbuchstaben, mindestens einer Zahl und einem Sonderzeichen."
