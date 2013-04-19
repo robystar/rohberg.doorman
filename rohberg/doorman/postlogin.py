@@ -20,7 +20,7 @@ from ZODB.POSException import ConflictError
 from AccessControl import getSecurityManager
 from zope.interface import Interface
 from zope.component import getUtility
-from zope.site.hooks import getSite
+zope.component.hooks
 
 # CMFCore imports
 from Products.CMFCore.utils import getToolByName
