@@ -7,7 +7,7 @@ from Products.CMFDefault.utils import checkEmailAddress
 from Products.PluggableAuthService.interfaces.plugins import \
     IValidationPlugin, IAuthenticationPlugin
 
-from zope.app.component.hooks import getSite
+from zope.site.hooks import getSite
 
 from rohberg.doorman import RDMessageFactory as _
 

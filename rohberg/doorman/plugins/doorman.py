@@ -3,7 +3,7 @@ import random
 import re
 # import datetime
 from DateTime import DateTime
-from zope.app.component.hooks import getSite
+from zope.site.hooks import getSite
 from Acquisition import aq_base, aq_parent, aq_inner
 from Products.CMFCore.utils import getToolByName
 
