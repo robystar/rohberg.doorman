@@ -65,7 +65,7 @@ alphabet = "+".join(alphabets)
 def getPassword(length=8, s=None):
     """generates strongerpassword
     """
-    length = length>=20 and langth or 20
+    length = length>=20 and length or 20
     password = []
     for group in alphabets:
         password += random.sample(group, 2)
