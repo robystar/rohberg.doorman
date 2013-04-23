@@ -10,6 +10,22 @@ from plone.app.users.browser.register import AddUserForm as Original_AddUserForm
 
 from Products.CMFPlone import PloneMessageFactory as _
 
+def generate_user_id(self, data):
+    """Generate a user id from data.
+
+    The data is the data passed in the form.  Note that when email
+    is used as login, the data will not have a username.
+
+    There are plans to add some more options and add a hook here
+    so it is possible to use a different scheme here, for example
+    creating a uuid or creating bob-jones-1 based on the fullname.
+
+    This will update the 'username' key of the data that is passed.
+    """
+    default = data.get('username') or data.get('email') or ''
+    data['username'] = default
+    return default
+    
 def new_validate_registration(self, action, data, errors = []):
     """
     specific business logic for this join form
@@ -149,5 +165,5 @@ class AddUserForm(Original_AddUserForm):
         errors = super(AddUserForm, self).validate(action, data)
         return new_validate_registration(self, action, data, errors)
 
-
-            
+RegistrationForm.generate_user_id = generate_user_id
+AddUserForm.generate_user_id = generate_user_id
