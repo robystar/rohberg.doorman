@@ -62,7 +62,7 @@ myrg = random.SystemRandom()
 alphabets = [string.lowercase, string.uppercase, string.digits, string.punctuation]
 alphabet = "+".join(alphabets)
 
-def getPassword(length=8, s=None):
+def getPassword(self, length=8, s=None):
     """generates strongerpassword
     """
     length = length>=20 and length or 20
