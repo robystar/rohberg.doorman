@@ -78,7 +78,7 @@ def patchGetPassword():
     RegistrationTool.getPassword = getPassword
 
 
-def beforeMailPassword(self, login, REQUEST):
+def beforeMailPassword(self, login, REQUEST, **kw):
     """ Password reset only with Role 'Member' """
     portal = getSite()
     reject_non_members = IAnnotations(portal).get('rohberg.doorman.reject_non_members', True)
@@ -88,7 +88,11 @@ def beforeMailPassword(self, login, REQUEST):
         if member:
             if not (member.has_role("Member") or member.has_role("Manager")):
                 raise ValueError(_(u"Your account is locked."))
-    return self.original_mailPassword(login,REQUEST)
+    return self.original_mailPassword(login, REQUEST, **kw)
+    # try:
+    #     return self.original_mailPassword(login, REQUEST, immediate)
+    # else:
+    #     return self.original_mailPassword(login, REQUEST)
     
 def patchMailPassword():
     RegistrationTool.original_mailPassword = RegistrationTool.mailPassword
