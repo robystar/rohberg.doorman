@@ -84,9 +84,11 @@ def redirect_to_loggedout_reset_password(user):
     username = user.getId()
     
     def isPasswordDurationExpired(portal, member):
-        username = user.getId()        
-        if username == "admin": return False  
-        
+        try:
+            member.getUserId()
+        except:    
+            return False
+                
         plugin = portal.acl_users.get(PLUGIN_ID, None)
         if not plugin:
             return False
@@ -94,8 +96,8 @@ def redirect_to_loggedout_reset_password(user):
         # if no password_duration defined or password_duration == 0: no password reset neccessary
         if password_duration < 1:
             return False
-        last_password_reset = member.getProperty('last_password_reset')
         jetzt = DateTime()
+        last_password_reset = member.getProperty('last_password_reset', jetzt-1000)
         cond = last_password_reset+password_duration < jetzt
         if cond:
             return True

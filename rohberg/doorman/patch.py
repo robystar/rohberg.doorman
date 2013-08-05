@@ -89,10 +89,7 @@ def beforeMailPassword(self, login, REQUEST, **kw):
             if not (member.has_role("Member") or member.has_role("Manager")):
                 raise ValueError(_(u"Your account is locked."))
     return self.original_mailPassword(login, REQUEST, **kw)
-    # try:
-    #     return self.original_mailPassword(login, REQUEST, immediate)
-    # else:
-    #     return self.original_mailPassword(login, REQUEST)
+    
     
 def patchMailPassword():
     RegistrationTool.original_mailPassword = RegistrationTool.mailPassword
