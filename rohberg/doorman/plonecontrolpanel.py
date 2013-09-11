@@ -145,7 +145,7 @@ def extendSecurityControlPanel(portal=None):
         IDoormanSettings
         )
         
-    print >> out, 'security control panel extended'
+    print >> out, 'rohberg.doorman: security control panel extended'
     print out.getvalue()
 
 

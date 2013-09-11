@@ -317,24 +317,24 @@ class StrengthenedPasswordPlugin(BasePlugin):
         portal = getSite()
         annotations = IAnnotations(portal)
         do_basic_auth_paths = annotations.get('rohberg.doorman.do_basic_auth_paths', [])
-                
-        realm = response.realm
-        
-        do_basic_auth = False
-        vup = request.get("VIRTUAL_URL_PARTS", None)
-        if vup:
-            vup = list(vup)
-            if len(vup) > 2:
-                do_basic_auth = vup[2] in do_basic_auth_paths 
-        if do_basic_auth:
-            if realm:
-                response.addHeader('WWW-Authenticate',
-                               'basic realm="%s"' % realm)
-            m = "<strong>You are not authorized to access this resource.</strong>"
+        if do_basic_auth_paths:
+            realm = response.realm
+            
+            do_basic_auth = False
+            vup = request.get("VIRTUAL_URL_PARTS", None)
+            if vup:
+                vup = list(vup)
+                if len(vup) > 2:
+                    do_basic_auth = vup[2] in do_basic_auth_paths 
+            if do_basic_auth:
+                if realm:
+                    response.addHeader('WWW-Authenticate',
+                                   'basic realm="%s"' % realm)
+                m = "<strong>You are not authorized to access this resource.</strong>"
 
-            response.setBody(m, is_error=1)
-            response.setStatus(401)
-            return 1
+                response.setBody(m, is_error=1)
+                response.setStatus(401)
+                return 1
         return 0
         
 for itf in PLUGIN_INTERFACES:

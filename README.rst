@@ -37,7 +37,10 @@ If an expiration of password is defined in security control panel and user has n
 Private RSS Feeds
 ========================
 
-Prevent redirect to login page for paths mentioned in control panel
+Prevent redirect to login page for paths mentioned in security control panel
+
+Add challenge plugin manually in your-plone-instance/acl_users/plugins/manage_plugins?plugin_type=IChallengePlugin
+and push to first position
 
 
 Links
