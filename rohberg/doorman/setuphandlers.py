@@ -53,7 +53,7 @@ def installPlugin(portal):
         # define which interfaces need to be moved to top of plugin list
         move_to_top_interfaces = [
             # (uf, 'IAuthenticationPlugin'),
-            # (uf, 'IChallengePlugin'),
+            (uf, 'IChallengePlugin'),
             # zope_pas: 'IAnonymousUserFactoryPlugin',
             ]
         for (pas, interface) in move_to_top_interfaces:

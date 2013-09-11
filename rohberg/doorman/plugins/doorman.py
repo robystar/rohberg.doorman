@@ -5,6 +5,7 @@ import re
 from DateTime import DateTime
 from zope.component.hooks import getSite
 from Acquisition import aq_base, aq_parent, aq_inner
+from zope.annotation.interfaces import IAnnotations
 from Products.CMFCore.utils import getToolByName
 
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
@@ -26,8 +27,8 @@ import logging
 log = logging.getLogger('doorman PAS Plugin')
 
 PLUGIN_ID = 'strengthenedpasswordpasplugin'
-PLUGIN_INTERFACES = [IValidationPlugin, IUserManagement] 
-# IAuthenticationPlugin, IChallengePlugin
+PLUGIN_INTERFACES = [IValidationPlugin, IUserManagement, IChallengePlugin] 
+# IAuthenticationPlugin
 
 DEFAULT_POLICIES = [(u'.{8}.*','Minimum 8 characters.')
                     ,(u'.*[A-Z].*','Minimum 1 capital letter.')
@@ -149,21 +150,8 @@ class StrengthenedPasswordPlugin(BasePlugin):
     
     def getPasswordDuration(self):
         return getattr(self, "password_duration", 0)
-        
-    # def isPasswordDurationExpired(self, username):
-    #     password_duration = getattr(self, "password_duration", 0)
-    #     # if no password_duration defined or password_duration == 0: no password reset neccessary
-    #     if password_duration < 1:
-    #         return False
-    #     mt = getToolByName(self, 'portal_membership')
-    #     member = mt.getMemberById(username)
-    #     last_password_reset = member.getProperty('last_password_reset')
-    #     jetzt = DateTime()
-    #     cond = last_password_reset+password_duration < jetzt
-    #     if cond:
-    #         return True
-    #     return False
-    
+
+
     security.declarePrivate('validateUserInfo')
     def validateUserInfo(self, user, set_id, set_info ):
 
@@ -316,6 +304,38 @@ class StrengthenedPasswordPlugin(BasePlugin):
     #     url = "%s/passwordreset/%s" % (self.portal.absolute_url(), reset)
     #     print "getPasswordResetURL", url
     #     return url   
+    # 
+    
+    security.declarePrivate( 'challenge' )
+    def challenge( self, request, response, **kw ):
+
+        """ Challenge the user for credentials.
+        
+        Prevent redirect to login page for paths mentioned in control panel"
+        """
+        
+        portal = getSite()
+        annotations = IAnnotations(portal)
+        do_basic_auth_paths = annotations.get('rohberg.doorman.do_basic_auth_paths', [])
+                
+        realm = response.realm
+        
+        do_basic_auth = False
+        vup = request.get("VIRTUAL_URL_PARTS", None)
+        if vup:
+            vup = list(vup)
+            if len(vup) > 2:
+                do_basic_auth = vup[2] in do_basic_auth_paths 
+        if do_basic_auth:
+            if realm:
+                response.addHeader('WWW-Authenticate',
+                               'basic realm="%s"' % realm)
+            m = "<strong>You are not authorized to access this resource.</strong>"
+
+            response.setBody(m, is_error=1)
+            response.setStatus(401)
+            return 1
+        return 0
         
 for itf in PLUGIN_INTERFACES:
     classImplements(StrengthenedPasswordPlugin, itf)

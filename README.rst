@@ -34,6 +34,12 @@ Password Duration
 
 If an expiration of password is defined in security control panel and user has not reset his password during defined expiration time reset password form is presented to user after login attempt which is rejected.
 
+Private RSS Feeds
+========================
+
+Prevent redirect to login page for paths mentioned in control panel
+
+
 Links
 =====
 

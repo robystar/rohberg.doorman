@@ -41,36 +41,6 @@ logger = logging.getLogger(__name__)
 from rohberg.doorman import RDMessageFactory as _
 
 
-# def reject_non_members(user):
-#     """reject user whithout "member"" Role
-#     """
-#     
-#     portal = getSite()
-#     request = getattr(portal, "REQUEST", None)
-#     if not request:
-#         return False
-#     username = user.getId()
-#     
-#     if not user.has_role('Member'):
-#         # logout:
-#         noSecurityManager()
-#         logger.info("Redirecting non-member %s to info page" % username)
-#         
-#         msg = _(u"Your account is locked.")
-#         IStatusMessage(request).addStatusMessage(msg, type='error')
-#         
-#         request.response.redirect(portal.absolute_url() + "/login")
-#         return True
-# 
-#     # Let the normal login proceed to the page "You are now logged in" etc.
-#     return False
-#          
-# @grok.subscribe(IUserLoggedInEvent)
-# def logged_in_handler_nonmember(event):
-#     user = event.object
-#     reject_non_members(user)
-    
-    
 def redirect_to_loggedout_reset_password(user):
     """
     Redirects the user to reset password form
@@ -148,14 +118,7 @@ def logged_in_handler(event):
     """
     Listen to the event and perform the action accordingly.
     """
-
+    
     user = event.object
-
     redirect_to_loggedout_reset_password(user)
-
-
-    
-    
-    
-    
     

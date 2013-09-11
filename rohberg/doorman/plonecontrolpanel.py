@@ -30,7 +30,14 @@ class IDoormanSettings(security.ISecuritySchema):
                 default=0)
     reject_non_members = schema.Bool(
                 title=_(u"Registrierte User, die nicht die Role 'Member' haben, ausschliessen."),
+                required=False,
                 default=True)
+    do_basic_auth_paths = schema.Text(
+                title=_(u"Prevent redirect to login page for following paths"),
+                description=_(u"One path per line. For example foren/RSS"),
+                required=False,
+                default=u""
+                )
 
 
 # password_policies
@@ -78,7 +85,23 @@ def get_reject_non_members(self):
 def set_reject_non_members(self, value):
     annotations = IAnnotations(self.portal)
     annotations['rohberg.doorman.reject_non_members'] = value
+
+# do_basic_auth_paths
+def get_do_basic_auth_paths(self):
+    annotations = IAnnotations(self.portal)
+    ann = annotations.get('rohberg.doorman.do_basic_auth_paths', [])
+    return u"" + "\n".join([str(item) for item in ann])
     
+def set_do_basic_auth_paths(self, value):
+    items = []
+    if value:         
+        value = value.strip(" \n")
+        items = value.split("\n")
+
+    annotations = IAnnotations(self.portal)
+    annotations['rohberg.doorman.do_basic_auth_paths'] = items
+
+
 
 def extendSecurityControlPanel(portal=None):     
     out = StringIO()   
@@ -100,6 +123,12 @@ def extendSecurityControlPanel(portal=None):
     security.SecurityControlPanelAdapter.reject_non_members = property(
         security.SecurityControlPanelAdapter.get_reject_non_members,
         security.SecurityControlPanelAdapter.set_reject_non_members
+        )
+    security.SecurityControlPanelAdapter.get_do_basic_auth_paths = get_do_basic_auth_paths
+    security.SecurityControlPanelAdapter.set_do_basic_auth_paths = set_do_basic_auth_paths
+    security.SecurityControlPanelAdapter.do_basic_auth_paths = property(
+        security.SecurityControlPanelAdapter.get_do_basic_auth_paths,
+        security.SecurityControlPanelAdapter.set_do_basic_auth_paths
         )
 
     # re-register adapter with new interface
