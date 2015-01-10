@@ -269,6 +269,7 @@ class DurationTestCase2(unittest.TestCase):
         
         browser.getControl(name='password').value = strongerpassword
         browser.getControl(name='password2').value = strongerpassword
+        browser.getControl(name='userid').value = username
         browser.getControl('Set my password').click()
         self.assertTrue('Your password has been set successfully.' in browser.contents)
         
@@ -305,7 +306,6 @@ class DurationTestCase2(unittest.TestCase):
         browserLogin(self.portal, browser, TEST_USER_NAME, TEST_USER_PASSWORD)        
         login(self.portal, TEST_USER_NAME)
         browser.open(self.portalURL+"/@@security-controlpanel")
-        # print browser.contents
         browser.getControl(name='form.reject_non_members').value = False
         browser.getControl(name='form.actions.save').click()
         
