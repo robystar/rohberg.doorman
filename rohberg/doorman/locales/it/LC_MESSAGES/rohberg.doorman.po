@@ -1,0 +1,82 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2013-04-04 11:21+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: de\n"
+"Language-Name: Deutsch\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: rohberg.doorman\n"
+
+#: ./plonecontrolpanel.py:28
+msgid "Days"
+msgstr "Giorni"
+
+#: ./plonecontrolpanel.py:27
+msgid "Duration of password validity."
+msgstr "Durata di validità della password"
+
+#: ./plugins/doorman.py:192
+msgid "New password has to differ from old one."
+msgstr "La nuova password deve essere diversa dalla precedente."
+
+#: ./plonecontrolpanel.py:23
+msgid "One expression per line: (u'.{8}.*', u'Minimum 8 characters.'). Default value is "
+msgstr "Una espressione regolare per riga: (u'.{8}.*', u'Minimo 8 caratteri.'). Default  "
+
+#: ./register.py:45
+msgid "Passwords do not match."
+msgstr "Le password non corrispondono"
+
+#: ./plonecontrolpanel.py:32
+msgid "Registrierte User, die nicht die Role 'Member' haben, ausschliessen."
+msgstr "Escludere gli utenti registrati che non hanno il ruolo 'Member'."
+
+#: ./plonecontrolpanel.py:22
+msgid "Regular Expressions that a password must regard."
+msgstr "Espressioni regolari che devono corrispondere a una password."
+
+#: ./register.py:98
+msgid "The login name you selected is already in use or is not valid. Please choose another."
+msgstr "Il nome utente selezionato è già stato usato oppure non è valido."
+
+#: ./register.py:89
+msgid "This username is reserved. Please choose a different name."
+msgstr "Nome utente riservato."
+
+#: ./patch.py:24
+msgid "You must enter a password."
+msgstr "Inserire la password."
+
+#: ./register.py:108
+msgid "You must enter a valid email address."
+msgstr "Inserire un indirizzo email valido."
+
+#: ./patch.py:92
+#: ./postlogin.py:122
+msgid "Your account is locked."
+msgstr "Il tuo account è bloccato. Se ritieni che questo sia sbagliato, contatta l'amministratore del sito web."
+
+#: ./patch.py:30
+msgid "Your password and confirmation did not match. Please try again."
+msgstr "Le password non coincidono."
+
+#: ./postlogin.py:135
+msgid "Your password is expired. Please reset your password."
+msgstr "Password scaduta, richiedere una nuova."
+
+#: ./patch.py:52
+msgid "Your password must contain at least 5 characters."
+msgstr "La password deve contenere almento 8 caratteri"
+
+#. Default: "You must set a password or choose to send an email."
+#: ./register.py:128
+msgid "msg_no_password_no_mail_me"
+msgstr "Scegli una password o seleziona l'opzione 'invia email'."
+
