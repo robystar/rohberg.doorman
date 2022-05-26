@@ -73,7 +73,7 @@ msgstr "Password scaduta, richiedere una nuova."
 
 #: ./patch.py:52
 msgid "Your password must contain at least 5 characters."
-msgstr "La password deve contenere almento 8 caratteri"
+msgstr "Regole per l'impostazione della password:"
 
 #. Default: "You must set a password or choose to send an email."
 #: ./register.py:128

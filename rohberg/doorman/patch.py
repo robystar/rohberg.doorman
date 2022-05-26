@@ -17,11 +17,13 @@ def testPasswordValidity(self, password, confirm=None):
 
     """ Verify that the password satisfies the portal's requirements.
 
+
     o If the password is valid, return None.
     o If not, return a string explaining why.
     """
     if not password:
         return _(u'You must enter a password.')
+
 
     # if len(password) < 5 and not _checkPermission(ManagePortal, self):
     #     return _(u'Your password must contain at least 5 characters.')
@@ -46,8 +48,8 @@ def testPasswordValidity(self, password, confirm=None):
         return ' '.join(err)
     else:
         # original policy if no custom policy defined
-        if len(password) < 5 and not _checkPermission(ManagePortal, self):
-            return _(u'Your password must contain at least 5 characters.')
+        if len(password) < 8 and not _checkPermission(ManagePortal, self):
+            return _(u'Reimpostazione password:')
         return None
     
     
